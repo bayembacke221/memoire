@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+    <defs>
+        <linearGradient id="a" x1="9.307%" x2="91.778%" y1="91.91%" y2="20.519%">
+            <stop offset="0%" stop-color="#54FFFF"/>
+            <stop offset="100%" stop-color="#2F78FE"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <circle cx="80" cy="80" r="80" fill="#FFF"/>
+        <g transform="translate(52 50)">
+            <rect width="37" height="50" x="6.225" y="4.707" fill="url(#a)" stroke="#000" stroke-width="2" rx="4" transform="rotate(-15 24.725 29.707)"/>
+            <rect width="39" height="52" x="18" y="8" fill="#FFF" fill-rule="nonzero" stroke="#000" stroke-width="2" rx="4"/>
+            <text fill="#000" font-family="Radnika-Medium, Radnika" font-size="22" font-weight="400">
+                <tspan x="24" y="55">€</tspan>
+            </text>
+            <path fill="url(#a)" stroke="#000" stroke-width="2" d="M25.5 17h23a1.5 1.5 0 0 1 0 3h-23a1.5 1.5 0 0 1 0-3zm0 7h14a1.5 1.5 0 0 1 0 3h-14a1.5 1.5 0 0 1 0-3zm0 7h19a1.5 1.5 0 0 1 0 3h-19a1.5 1.5 0 0 1 0-3z"/>
+        </g>
+    </g>
+</svg>

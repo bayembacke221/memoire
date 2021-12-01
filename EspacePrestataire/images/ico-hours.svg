@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="160" height="160" viewBox="0 0 160 160">
+    <defs>
+        <rect id="a" width="43" height="36" rx="4"/>
+        <path id="b" d="M6 14h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1zm18 0h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1zm-9 0h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1zm18 0h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1zM6 23h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1zm18 0h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1zm-9 0h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1zm18 0h3a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-3a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1z"/>
+        <linearGradient id="d" x1="0%" y1="57.968%" y2="57.968%">
+            <stop offset="0%" stop-color="#54FFFF"/>
+            <stop offset="100%" stop-color="#2F78FE"/>
+        </linearGradient>
+        <path id="c" d="M4 0h35a4 4 0 0 1 4 4v5H0V4a4 4 0 0 1 4-4z"/>
+        <linearGradient id="e" x1="9.307%" x2="91.778%" y1="91.91%" y2="20.519%">
+            <stop offset="0%" stop-color="#54FFFF"/>
+            <stop offset="100%" stop-color="#2F78FE"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <circle cx="80" cy="80" r="80" fill="#FFF"/>
+        <g stroke="#000" stroke-width="2" transform="translate(44 54)">
+            <circle cx="50" cy="20" r="20" fill="#FFF" fill-rule="nonzero"/>
+            <g transform="translate(0 17)">
+                <use fill="#FFF" fill-rule="nonzero" xlink:href="#a"/>
+                <use fill="#FFF" fill-rule="nonzero" xlink:href="#b"/>
+                <use fill="url(#d)" xlink:href="#c"/>
+            </g>
+            <path fill="url(#e)" d="M52 18h7a2 2 0 1 1 0 4h-9a2 2 0 0 1-2-2V8a2 2 0 1 1 4 0v10z"/>
+        </g>
+    </g>
+</svg>

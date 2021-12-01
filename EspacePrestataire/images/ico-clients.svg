@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160">
+    <defs>
+        <linearGradient id="a" x1="9.307%" x2="91.778%" y1="91.91%" y2="20.519%">
+            <stop offset="0%" stop-color="#54FFFF"/>
+            <stop offset="100%" stop-color="#2F78FE"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <circle cx="80" cy="80" r="80" fill="#FFF"/>
+        <path fill="url(#a)" stroke="#000" stroke-linejoin="round" stroke-width="2" d="M75.145 52.14c0 5.049 4.08 9.14 9.109 9.14 5.03 0 9.108-4.091 9.108-9.14 0-5.048-4.079-9.14-9.108-9.14-5.03 0-9.109 4.092-9.109 9.14m-17.697 6.128c0 3.384 2.735 6.128 6.106 6.128 3.372 0 6.105-2.744 6.105-6.128s-2.733-6.128-6.105-6.128c-3.371 0-6.106 2.744-6.106 6.128M72.511 79.65V102H99V79.65c0-7.34-5.93-13.291-13.244-13.291s-13.245 5.95-13.245 13.29M54 77.717v12.488h18.37V77.717c0-5.09-4.112-9.216-9.186-9.216-5.07 0-9.184 4.126-9.184 9.216"/>
+        <g stroke="#000" stroke-width="2" transform="translate(94 72)">
+            <circle cx="11" cy="11" r="11" fill="#FFF" fill-rule="nonzero"/>
+            <path fill="url(#a)" d="M10.536 14.9l-4.95-4.95A2 2 0 1 1 8.414 7.12l3.536 3.536 7.07-7.071a2 2 0 1 1 2.83 2.828L13.363 14.9a2 2 0 0 1-2.828 0z"/>
+        </g>
+    </g>
+</svg>
