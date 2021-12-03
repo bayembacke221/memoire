@@ -5,12 +5,15 @@ require_once('../Function/function.php');
 if (isset($_SESSION['email'])) {
     $user = getClient($_SESSION['idClient'], $BDD);
     $info = (int) trim($_GET['infoId']);
+    $nomoffre= (string) trim($_GET['nomoffre']);
+    // echo $nomoffre;
+    // exit;
     $sql="SELECT p.*, o.*,ps.*
     FROM prestataire p 
     LEFT JOIN offre o ON (o.idPrestataire =p.numero) LEFT JOIN personne ps ON (ps.numero =p.numero)
-    WHERE o.idOffre=? AND etat=1";
+    WHERE o.nomOffre=? AND etat=1";
     $req=$BDD->prepare($sql);
-    $req->execute(array($info));
+    $req->execute(array($nomoffre));
     $rows = $req->fetchAll();
     
    
@@ -70,30 +73,50 @@ if (isset($_SESSION['email'])) {
             </div>
         </nav>
     </header>
-    <section class="menu section bd-container" id="menu" >  
-            <div class="menu__container bd-grid">
+    <section   class="menu section bd-container" id="menu" >  
+            <div style="column-gap: 10rem;margin-left: 270px;" class="menu__container bd-grid"> 
+   
                 <?php
                         foreach ($rows  as $row) {
                             ?>
+                            <div class="box">
+                                    <div class="slide-img">
+                                    <img   src="../EspacePrestataire/images/<?=$row['photo']?>" ><br>
+                                        <div class="overlay">
+                                            <a href="#"  data-bs-toggle="modal" data-bs-target="#valider" data-bs-whatever="<?=$row['description']?>" class="service-btn">Voir detail</a>
+                                        </div>
+                                    </div>
+                                    <div class="detail-box">
+                                        <div class="type">
+                                        <h3 style="color: #069C54;" class="menu__name"><?= $row['prenom']?> <?= $row['nom']?></h3>
+                                            <p><?=$row['nomOffre']?></p>
+                                            <a href="voir_prestataire.php?infoId=<?=$row['idPrestataire']?>&idOffre=<?=$row['idOffre']?>" ><button type="submit" 
+                                            style="display:flex; justify-content: center; align-items: center; max-width:100px" 
+                                            name="user-seeing" class="btn btn-success ms-5">Demander un service</button></a>
+                                                            
+                                        </div>
+                                    </div>
+                            </div>
 
-                        <div class="menu__content"  >
-                            <img   src="../EspacePrestataire/images/<?=$row['photo']?>" class="rounded-circle"><br>
-                            <h3 style="color: #069C54;" class="menu__name"><?= $row['prenom']?></h3><br>
-                            <h3 style="color: #069C54;" class="menu__name"><?= $row['nom']?></h3><br>
-                            <h3 style="color: #069C54;" class="menu__name"><?= $row['nomOffre']?></h3><br>
-                            <a href="voir_prestataire.php?infoId=<?=$row['idPrestataire']?>&idOffre=<?=$row['idOffre']?>" ><button type="submit" 
-                            style="display:flex; justify-content: center; align-items: center; max-width:100px" 
-                            name="user-seeing" class="btn btn-success ms-4">Demander un service</button></a>
+                        <div class="modal fade" id="valider" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                            <h5 class="modal-title"><?=$row['nomOffre']?></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p></p>
+                                    </div>
+                                    
+                                </div>
+                            </div>
                         </div>
+
+                        
                         <?php
-                        }
-                    
-                
-            
-
-
-                    
-                ?>
+                        } 
+                        ?>
             </div>
     </section>
 
@@ -119,6 +142,15 @@ if (isset($_SESSION['email'])) {
 
 	<!--========== MAIN JS ==========-->
 	<script src="../assets/js/main.js"></script>
+    <script>
+        var exampleModal = document.getElementById('valider')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var recipient = button.getAttribute('data-bs-whatever')
+        var modalBodyInput = exampleModal.querySelector('.modal-body p')
+        modalBodyInput.innerHTML = recipient
+    })
+    </script>
 </body>
 </html>
 

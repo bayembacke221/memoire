@@ -135,7 +135,7 @@ if (isset($_SESSION['numero'])) {
                     </div>
                     <div class="modal-body">
                             <div class="form-group">
-                                <h6 class="heading-small text-muted mb-4">Nom</h6>
+                                <h6 class="heading-small text-muted mb-4">Libelle</h6>
                                     <input type="text"  name="nom"   class="form-control">
                             </div>
                             <div class="form-group">

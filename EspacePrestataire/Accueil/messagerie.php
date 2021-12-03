@@ -12,9 +12,9 @@ if (isset($_SESSION['numero'])){
     $sql = "SELECT d.idDemande,d.etat,d.idPrestataire,d.information,ps.*,c.idClient
     FROM demande d
     LEFT JOIN client c ON (d.idClient= c.numero) LEFT JOIN personne ps ON (ps.numero =c.numero)
-    WHERE  d.idPrestataire=? AND d.etat=?";
+    WHERE  d.idPrestataire=? ";
     $req=$BDD->prepare($sql);
-    $req->execute(array( $prestataire, 2));
+    $req->execute(array( $prestataire));
      $voir_profil=$req->fetch();
     
      if(!empty($_POST)){
@@ -108,10 +108,9 @@ if (isset($_SESSION['numero'])){
                 ?>
                 <div class="menu__content"  >
                         <img src="../../EspaceClient/images/<?=$voir_profil['photo']?>"
-                            class=" rounded-circle"><br>
-                    <h3 class="menu__name ms-2">Prenom : <?=$voir_profil['prenom']?></h3><br>
-                    <h3 class="menu__name">Nom : <?=$voir_profil['nom']?></h3><br>
-                    <h3 class="menu__name">Motif : <?=$voir_profil['information']?></h3>
+                            class=" rounded-circle"><br><br>
+                    <h3 class="menu__name ms-2"><?=$voir_profil['prenom']?> <?=$voir_profil['nom']?></h3><br>
+                    
                         <?php
 			            if(isset($_SESSION['numero'])){
                             
@@ -119,7 +118,7 @@ if (isset($_SESSION['numero'])){
                         <form method="post" >
                         <input type="hidden"  name="id_relation" value="<?= $voir_profil['idPrestataire']?>" />
                         <input type="hidden"  name="id_cible" value="<?= $voir_profil['numero']?>" /><br>
-                        <?php if(isset($voir_profil['etat']) && $voir_profil['etat']==2) {?>
+                        <?php if(isset($voir_profil['etat']) && $voir_profil['etat']>=2) {?>
                             <a class="nav__link" href="discussion.php?idClient=<?= $voir_profil['numero']?>&idPrestataire=<?= $_SESSION['numero']?>">
                                 <button style="max-width: 70%;" type="button" id="discussion"  name="discussion" class="btn btn-success ms-4	">Discuter avec le client</button><br><br>
                             </a>
@@ -131,7 +130,7 @@ if (isset($_SESSION['numero'])){
                          }
                     ?>
                 </div>
-                <?php     # code...
+                <?php     
                     }?>
             </div>
 

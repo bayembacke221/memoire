@@ -34,7 +34,7 @@ if (isset($_POST['key'])) {
                                     <h3 class="fs-xs m-2">
                                     <?=$service['nomOffre']?>
                                     </h3>
-                                        <a href="voir_offre.php?infoId=<?=$service['idOffre']?>" ><button type="submit" style="display:flex; justify-content: center; align-items: center; max-width:100px" name="user-seeing" class="btn btn-primary">Demander ce service</button></a>
+                                        <a href="voir_offre.php?infoId=<?=$service['idOffre']?>&nomoffre=<?=$service['nomOffre']?>" ><button type="submit" style="display:flex; justify-content: center; align-items: center; max-width:100px" name="user-seeing" class="btn btn-primary">Demander ce service</button></a>
                                 </div>
 	                        </li>
  
