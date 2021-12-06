@@ -5,6 +5,21 @@ if (isset($_SESSION['numero'])) {
     $query = $BDD->prepare("SELECT * FROM offre WHERE idPrestataire=?");
     $query->execute([$_SESSION['numero']]);
     $verification_offre = $query->fetchAll();
+    if(!empty($_POST)){
+        extract($_POST);
+        $valid = (boolean)true;
+        if (isset($_POST['supprimer'])) {
+            $idOffre =(int)$idOffre;
+            $idPrestataire = (int)$idPrestataire;
+            if($idPrestataire){
+                $supprimerPhoto= $BDD->prepare("DELETE FROM image where idOffre=?");
+                $supprimerPhoto->execute(array($idOffre));
+                $req = $BDD->prepare("DELETE  FROM offre WHERE idPrestataire=? AND idOffre=? ");
+                $req->execute(array($idPrestataire, $idOffre));
+            }
+           
+        }
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,8 +85,31 @@ if (isset($_SESSION['numero'])) {
             <div class="menu__content"  >
                 <h3 style="color: #069C54;" class="menu__name"><?= $offre['nomOffre']?></h3><br>
                 <h3 style="color: #393939;" class="menu__name"><?= $offre['description']?></h3><br>
-              </div>
+                <div><br>
+                    <form method="post" action="">
+                        <input type="hidden" name="idOffre" value="<?= $offre['idOffre']?>">
+                        <input type="hidden" name="idPrestataire" value="<?= $offre['idPrestataire']?>">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#valider" data-bs-whatever="<?=$offre['description']?>" class="btn btn-primary" name="editer"><i class='bx bxs-edit'></i></button>
+                        <button type="submit" class="btn btn-danger ms-5" name="supprimer"><i class='bx bxs-comment-x' ></i></button>
+                    </form>
+                </div>
+               </div>
+               <div class="modal fade" id="valider" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                            <h5 class="modal-title"><?=$offre['nomOffre']?></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <textarea cols="50" class="form-control" rows="4" name="description"></textarea>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
               <?php
+
  }
 ?>
             </div>
@@ -102,6 +140,15 @@ if (isset($_SESSION['numero'])) {
 
 		<!--========== MAIN JS ==========-->
 		<script src="../../assets/js/main.js"></script>
+        <script>
+        var exampleModal = document.getElementById('valider')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var recipient = button.getAttribute('data-bs-whatever')
+        var modalBodyInput = exampleModal.querySelector('.modal-body textarea')
+        modalBodyInput.innerHTML = recipient
+    })
+    </script>
 </body>
 </html>
 

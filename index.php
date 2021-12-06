@@ -6,7 +6,9 @@ $services =$query->fetchAll();
 $query2 = $BDD->query("SELECT * FROM service LIMIT 10 OFFSET 9 ");
 $service2s =$query2->fetchAll();
 
-$query=$BDD->prepare("SELECT n.*,p.numero,p.prenom,p.nom,p.adresse,p.telephone,p.photo FROM notes n LEFT JOIN personne p ON (n.idPrestataire= p.numero)");
+$query=$BDD->prepare("SELECT n.*,p.numero,p.prenom,p.nom,p.adresse,p.telephone,p.photo,ps.*
+ FROM notes n LEFT JOIN personne p ON (n.idPrestataire= p.numero)
+ LEFT JOIN prestataire ps ON (ps.idPrestataire=p.numero)");
 $query->execute();
 $stmt = $query->fetch();
 ?>
@@ -126,20 +128,6 @@ $stmt = $query->fetch();
                         <div class="carousel-caption d-none d-md-block">
                             <h5 style="color: #069C54;">Les meilleurs ouvriers sélectionnés pour vous </h5>
                             <p style="color: #fff;">Nous vous libérons du stress lié aux travaux et facilitons votre relation avec les différents ouvriers</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="EspaceClient/images/femme.jpg" class="d-block w-100" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5 style="color: #069C54;">Third slide label</h5>
-                            <p style="color: #fff;">Some representative placeholder content for the third slide.</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="EspaceClient/images/x11080.jpg" class="d-block w-100" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5 style="color: #069C54;">Third slide label</h5>
-                            <p style="color: #fff;">Some representative placeholder content for the third slide.</p>
                         </div>
                     </div>
                 </div>
@@ -284,6 +272,7 @@ $stmt = $query->fetch();
             <div class="menu__content"  >
                     <img   src="EspacePrestataire/images/<?=$stmt['photo']?>" class="rounded-circle"><br>
                     <h3 style="color: #069C54;" class="menu__name m-sm-3"><?= $stmt['prenom']?> <?= $stmt['nom']?></h3><br>
+                    <h3 style="color: #069C54;" class="menu__name "><?= $stmt['profession']?></h3><br>
                     <h3 style="color: #393939;" class="menu__name "><?= $stmt['contenu']?><br><?=$stmt['DateNote']?></h3><br>
                     
             </div>
