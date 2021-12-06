@@ -1,7 +1,58 @@
 <?php
 session_start();
 require_once('../../ConnexionDB/connexionDB.php');
+require_once('function.php');
 if (isset($_SESSION['numero'])) {
+    $sql = "SELECT * FROM service";
+    $req = $BDD->prepare($sql);
+    $req->execute();
+    $rows=$req->fetchAll();
+    if (isset($_POST['envoyer'])) {
+        if (isset($_POST['nom']) && isset($_POST['profession']) && isset($_POST['description']) ) {
+           
+            
+            $nom = $_POST['nom'];
+            $profession = $_POST['profession'];
+            $description = $_POST['description'];
+    
+            $query = $BDD->prepare("SELECT * FROM service WHERE nom =?");
+            $query->execute(array($profession));
+            $idServices=$query->fetch();
+            $idService=$idServices['idService'];
+            
+     
+            $sql = $BDD->prepare("INSERT INTO `offre` (`etat`,`idService`,`idPrestataire`,nomOffre,description) VALUES(?,?,?,?,?)");
+            $sql->execute(array(1,$idService,$_SESSION['numero'],$nom,$description));
+        } 
+        $idOffre=$BDD->lastInsertId();
+ 
+ 
+ 
+         if (isset($_FILES['photo'])) {
+            $total_count = count($_FILES['photo']['name']); 
+            for ($i=0; $i < $total_count; $i++) { 
+                $fic= $_FILES['photo']['name'][$i];
+
+                $url=$_FILES['photo']['tmp_name'][$i];
+                if (valid_extension($fic)) {
+                    if ($newPic= (move_file($url,"Imageoffre",$fic))){
+                        $reqq ="INSERT INTO `image` (`idOffre`, `nom`) VALUES (?,?)";
+                        $stmt = $BDD->prepare($reqq);
+                        $stmt->execute(array($idOffre,$newPic));
+                    } else {
+                        echo 'Echec de deplacement';
+                    }
+                } else {
+                    echo 'mauvaise extension';
+                } 
+            }
+
+
+
+
+        }
+    }
+
     $query = $BDD->prepare("SELECT * FROM offre WHERE idPrestataire=?");
     $query->execute([$_SESSION['numero']]);
     $verification_offre = $query->fetchAll();
@@ -16,8 +67,23 @@ if (isset($_SESSION['numero'])) {
                 $supprimerPhoto->execute(array($idOffre));
                 $req = $BDD->prepare("DELETE  FROM offre WHERE idPrestataire=? AND idOffre=? ");
                 $req->execute(array($idPrestataire, $idOffre));
+                header('Location: favoris.php');
+                exit();
             }
            
+        }
+
+        if (isset($_POST['edition'])) {
+            $idOffres =(int)$idOffres;
+            $idPrestataires = (int)$idPrestataires;
+            if(isset($_POST['descriptions'])){
+                $description = $_POST['descriptions'];
+                $req = $BDD->prepare("UPDATE offre SET description=?   WHERE  idOffre=?");
+                $req->execute(array($description,$idOffres));
+                header('Location: favoris.php');
+                exit();
+               
+            }
         }
     }
 ?>
@@ -74,8 +140,58 @@ if (isset($_SESSION['numero'])) {
             </div>
         </nav>
     </header>
+    <div class="modal fade" id="ajouter" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <form method="post" action="" enctype="multipart/form-data">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Fiche d'ajout d'offre</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                            <div class="form-group">
+                                <h6 class="heading-small text-muted mb-4">Libelle</h6>
+                                    <input type="text"  name="nom"   class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <h6 class="heading-small text-muted mb-4">Service</h6>
+                                <select name="profession" class="form-select form-select-sm mb-3 " aria-label=".form-select-sm example">
+                                    <option selected>Choix de service</option>
+                                    <?php
+                                        foreach($rows as $row){
+                                    ?>
+                                    <option value="<?=$row['nom']?>"> <?=$row['nom']?></option>
+                                    <?php
+                                    }
+                                    ?>
+							    </select>
+                            </div>
+                            <div class="form-group">
+                                <h6 class="heading-small text-muted mb-4">Photo(s) de l'offre</h6>
+                                <input type="file" id="photo" name="photo[]" multiple  class="form-control">
+                            </div>
+                            <h6 class="heading-small text-muted mb-4">Description de l'offre</h6>
+                                <div class="pl-lg-4">
+                                <div class="form-group focused">
+                                    <label></label>
+                                    <textarea rows="4" name="description" class="form-control form-control-alternative" placeholder="Explication ..."></textarea>
+                                </div>
+                                </div>
+                    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="reset" name="annuler" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" id="envoyer" name="envoyer" class="btn btn-primary">Envoyer</button>
+                    </div>
+                    </div>
+            </form>
+        </div>
+    </div>
    
     <br><br><br>
+    <button style="float:right;margin-right: 15%;margin-top:1%;" type="submit" 
+    data-bs-toggle="modal" data-bs-target="#ajouter"
+      name="ajouter" class="btn btn-success"><i class='bx bxs-add-to-queue'></i>Ajouter offre</button>
     <span style="margin-left:2.5%;font-size: 200%;" class="section-subtitles">Services proposés</span>
    <section style="margin-top: -10%;margin-left:5%;" class="menu section bd-container" id="menu" >  
             <div class="menu__container bd-grid">
@@ -87,9 +203,11 @@ if (isset($_SESSION['numero'])) {
                 <h3 style="color: #393939;" class="menu__name"><?= $offre['description']?></h3><br>
                 <div><br>
                     <form method="post" action="">
-                        <input type="hidden" name="idOffre" value="<?= $offre['idOffre']?>">
+                        <input  type="hidden" name="idOffre" value="<?= $offre['idOffre']?>">
                         <input type="hidden" name="idPrestataire" value="<?= $offre['idPrestataire']?>">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#valider" data-bs-whatever="<?=$offre['description']?>" class="btn btn-primary" name="editer"><i class='bx bxs-edit'></i></button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#valider" 
+                        data-bs-whatever="<?=$offre['description']?>" data-whatever="<?= $offre['idOffre']?>"
+                         class="btn btn-primary" name="editer"><i class='bx bxs-edit' id="offre" ></i></button>
                         <button type="submit" class="btn btn-danger ms-5" name="supprimer"><i class='bx bxs-comment-x' ></i></button>
                     </form>
                 </div>
@@ -101,10 +219,16 @@ if (isset($_SESSION['numero'])) {
                                             <h5 class="modal-title"><?=$offre['nomOffre']?></h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-body">
-                                        <textarea cols="50" class="form-control" rows="4" name="description"></textarea>
-                                    </div>
-                                    
+                                    <form method="post">
+                                        <div class="modal-body">
+                                                <input type="hidden" name="idOffres" >
+                                                <textarea cols="50" class="form-control" rows="4" name="descriptions"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+                                            <button type="submit" name="edition" class="btn btn-primary">Editer</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -141,12 +265,17 @@ if (isset($_SESSION['numero'])) {
 		<!--========== MAIN JS ==========-->
 		<script src="../../assets/js/main.js"></script>
         <script>
+        var offre = document.querySelector('i #offre');
         var exampleModal = document.getElementById('valider')
         exampleModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget
         var recipient = button.getAttribute('data-bs-whatever')
+        var idOffre = button.getAttribute('data-whatever')
         var modalBodyInput = exampleModal.querySelector('.modal-body textarea')
+        var modalBodyInputs = exampleModal.querySelector('.modal-body input')
         modalBodyInput.innerHTML = recipient
+        modalBodyInputs.value=idOffre
+        console.log(idOffre)
     })
     </script>
 </body>

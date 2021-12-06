@@ -9,9 +9,8 @@ if (isset($_SESSION['numero'])) {
     $rows=$req->fetchAll();
     $user = getUser($_SESSION['username'], $BDD);
     if (isset($_POST['envoyer'])) {
-        echo "yes ";
         if (isset($_POST['nom']) && isset($_POST['profession']) && isset($_POST['description']) ) {
-            echo "ok ok";
+           
             
             $nom = $_POST['nom'];
             $profession = $_POST['profession'];
