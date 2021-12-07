@@ -176,21 +176,22 @@ if (isset($_SESSION['username'])) {
                     
                 ?>
                 <div style="background-color: #393939;" class="menu__content"  >
-                        <img src="../../EspaceClient/images/<?=$voir_profil['photo']?>"
-                            class=" rounded-circle"><br>
-                    <h3 style="color: #069C54;" class="menu__name ms-2">Prenom : <?=$voir_profil['prenom']?></h3><br>
-                    <h3 style="color: #069C54;" class="menu__name">Nom : <?=$voir_profil['nom']?></h3>
-                    <h3 style="color: #fff;" class="menu__name">Motif : <?=$voir_profil['information']?></h3>
+                        <img style="border-radius: 10%;" src="../../EspaceClient/images/<?=$voir_profil['photo']?>"
+                            ><br>
+                    <h3 style="color: #069C54;" class="menu__name ms-2"><br><?=$voir_profil['prenom']?>  <?=$voir_profil['nom']?></h3><br>
                     <?php
 			            if(isset($_SESSION['idPrestataire'])){
 						?>
                     <form method="post" >
                         <input type="hidden"  name="id_relation" value="<?= $voir_profil['idPrestataire']?>" />
                         <input type="hidden"  name="id_cible" value="<?= $voir_profil['idClient']?>" /><br>
+                        <button style="max-width: 70%;" data-bs-toggle="modal" data-bs-target="#valider"  
+                        data-bs-whatever="<?=$voir_profil['information']?>"
+                        type="button" name="details" class="btn btn-info ms-4	btn-lg">Details</button><br><br>
                         <?php
                             if(isset($voir_profil['etat']) && $voir_profil['etat']==0){
 			            ?>
-                        <button style="max-width: 70%;" type="submit" name="accepter" class="btn btn-success ms-4	btn-lg">Accepter</button><br><br>
+                         <button style="max-width: 70%;" type="submit" name="accepter" class="btn btn-success ms-4	btn-lg">Accepter</button><br><br>
                         <?php
                             }elseif(isset($voir_profil['etat']) && $voir_profil['etat']==1){ 
                         ?>
@@ -212,12 +213,41 @@ if (isset($_SESSION['username'])) {
                     }
                     ?>
                 </div>
-                <?php     # code...
+                <?php     
                     }?>
             </div>
      </section> 
-     <!--Modal -->
-     
+     <div class="modal fade" id="valider" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                            <h5 class="modal-title"></h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="post">
+                                        <div class="modal-body">
+                                        <?php
+                                                $query =$BDD->prepare("SELECT * FROM photodemande WHERE idDemande = ? ");
+                                                $query->execute([$voir_profil['idDemande']]);
+                                                $rows=$query->fetchAll();
+
+
+                                                foreach ($rows as $row){
+                                                    ?>
+                                                    <img style="max-width:30%;display:inline-block" src="../../EspaceClient/<?=$row['nomPhoto']?>" alt="<?=$row['idPhotoDemande']?>">
+                                                    <?php
+                                                }
+                                            ?>
+                                            
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+    
             <?php
 			require_once('../../Footer/footer.php')
 		
@@ -241,37 +271,14 @@ if (isset($_SESSION['username'])) {
 		<!--========== MAIN JS ==========-->
 		<script src="../../assets/js/main.js"></script>
         <script>
-
-        // var Envoyer = document.getElementById("accepter");
-        // Envoyer.addEventListener('click', function (){
-        //     Swal.fire(
-        //         'Demande envoyee !!',
-        //         'Cliquez sur le bouton pour pousuivre',
-        //         'success')
-        // },false)
-
-
-        // var btnSupprimer = document.getElementById("refuser");
-        //    btnSupprimer.addEventListener('click', function (){
-        //         Swal.fire({
-        //             title: 'Etes vous sur?',
-        //             text: "De vouloir annule votre demande",
-        //             icon: 'warning',
-        //             showCancelButton: true,
-        //             confirmButtonColor: '#3085d6',
-        //             cancelButtonColor: '#d33',
-        //             confirmButtonText: 'Oui, je veux annuler'
-        //             }).then((result) => {
-        //             if (result.isConfirmed) {
-        //                 Swal.fire(
-        //                 'Deleted!',
-        //                 'Demande annulee.',
-        //                 'success'
-        //                 )
-        //             }
-        //         })
-        //     },false)
-</script>
+        var exampleModal = document.getElementById('valider')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var recipient = button.getAttribute('data-bs-whatever')
+        var modalBodyInput = exampleModal.querySelector('.modal-title')
+        modalBodyInput.innerHTML = "motif "+ recipient
+    })
+    </script>
 </body>
 </html>
 
