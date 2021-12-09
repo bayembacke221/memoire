@@ -186,14 +186,13 @@ if (isset($_SESSION['email'])) {
     
 
     <div style="padding-top: 5%;width:55%;margin-left: 22.5%;" class="menu__content">
-        <img class="card-img rounded-circle" 
-        style="max-width:20%;display:flex;justify-content: center;align-items: center;margin-left: 40%;"
+        <img class="card-img" 
+        style="max-width:20%;display:flex;justify-content: center;align-items: center;margin-left: 40%; border-radius: 10%;"
          src="../EspacePrestataire/images/<?=$voir_prestataire['photo']?>" alt="2"><br>
-         <h3 class="menu__name ms-4 m-sm-2">Prenom : <?=$voir_prestataire['prenom']?></h3><br>
-         <h3 class="menu__name ms-3 m-sm-2">Nom : <?=$voir_prestataire['nom']?></h3><br>
-        <h3 class="menu__name ms-4 m-sm-2">Telephone : <?=$voir_prestataire['telephone']?></h3><br>
-        <h3 class="menu__name ms-2 m-sm-2">Proffession : <?=$voir_prestataire['profession']?></h3><br><br>
-        <h3 class="menu__name ms-2 m-sm-2">Service : <?=$offreId['nomOffre']?></h3><br><br>
+         <h3 class="menu__name ms-4 m-sm-2"><?=$voir_prestataire['prenom']?> <?=$voir_prestataire['nom']?></h3>
+        <h3 class="menu__name ms-4 m-sm-2">Telephone : <?=$voir_prestataire['telephone']?></h3>
+        <h3 class="menu__name ms-2 m-sm-2">Proffession : <?=$voir_prestataire['profession']?></h3>
+        <h3 class="menu__name ms-2 m-sm-2">Service : <?=$offreId['nomOffre']?></h3>
         <?php
 			if(isset($_SESSION['email'])){
 						?>
