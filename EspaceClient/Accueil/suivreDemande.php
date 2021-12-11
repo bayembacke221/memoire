@@ -3,23 +3,12 @@ session_start();
 require_once('../../ConnexionDB/connexionDB.php');
 require_once('function.php');
 if (isset($_SESSION['numero'])) {
-    $query =$BDD->prepare("SELECT d.*,p.*,o.idPrestataire,o.idService FROM  demande d 
+    $query =$BDD->prepare("SELECT DISTINCT d.*,p.*,o.idPrestataire,o.idService FROM  demande d 
     LEFT JOIN personne p ON (p.numero = d.idPrestataire) LEFT JOIN offre o ON (o.idPrestataire=p.numero)
  where d.idClient=? ");
     $query->execute(array($_SESSION['numero']));
-    $stmt = $query->fetch();
-    if (isset($_POST['note'])) {
-        if ( isset($_POST['comment'])  && isset($_POST['note']) ){
-            $note = $_POST['note'];
-            $comment = $_POST['comment'];
-            $prestataire = $stmt['idPrestataire'];
-            $query = $BDD->prepare("INSERT INTO notes (idClient,idPrestataire,contenu,note) VALUES (?, ?, ?, ?)");
-            $query->execute(array($_SESSION['numero'],$prestataire,$comment,$note));
-        }
-    }
-    $select= $BDD->prepare("SELECT * FROM notes where idClient=?");
-    $select->execute(array($_SESSION['numero']));
-    $notes = $select->rowCount();
+    $stmts = $query->fetchAll();
+   
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,39 +66,27 @@ if (isset($_SESSION['numero'])) {
             </div>
         </nav>
     </header>
-    <div class="modal fade" id="valider" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <form method="post" action="" enctype="multipart/form-data">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Note de <?=$stmt['prenom']?>  <?=$stmt['nom']?></h5> 
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                    <h6 class="heading-small text-muted mb-4">Note</h6>
-                        <div class="stars">
-                            <i class="bx bxs-star" data-value="1"></i><i class="bx bxs-star" data-value="2"></i><i class="bx bxs-star" data-value="3"></i><i class="bx bxs-star" data-value="4"></i><i class="bx bxs-star" data-value="5"></i>
-                        </div><br>
-                        <h6 class="heading-small text-muted mb-4">Commentaire</h6>
-                        <div class="form-group focused">
-                            <div  class="form-group focused">
-                                <label for="commentaire"></label>
-                                <textarea name="comment" id="commentaire" class="form-control form-control-alternative" placeholder="Commentaire ..."></textarea>
-                            </div>
-                        </div>
-                        <input type="hidden" name="note" id="note" value="0">
-                        <button class="btn btn-info btn-lg ms-4	" type="submit">Valider</button>
-                                            
-                    </div>
-                                        
-                </div>
-            </form>
-        </div>
-    </div>
+   
 
     
     <section class="menu section bd-container" id="menu" >  
+      
             <div class="menu__container bd-grid">
+            <?php
+        foreach ($stmts as $stmt){
+                 if (isset($_POST['note'])) {
+                    if ( isset($_POST['comment'])  && isset($_POST['note']) ){
+                        $note = $_POST['note'];
+                        $comment = $_POST['comment'];
+                        $prestataire = $stmt['idPrestataire'];
+                        $query = $BDD->prepare("INSERT INTO notes (idClient,idPrestataire,contenu,note) VALUES (?, ?, ?, ?)");
+                        $query->execute(array($_SESSION['numero'],$prestataire,$comment,$note));
+                    }
+                }
+                $select= $BDD->prepare("SELECT * FROM notes where idClient=?");
+                $select->execute(array($_SESSION['numero']));
+                $notes = $select->rowCount();
+        ?>
                 <?php
                 if (isset($stmt['etat'])) {
                     ?>
@@ -148,11 +125,42 @@ if (isset($_SESSION['numero'])) {
                     ?>
                 </div>
                 <?php
+                 }
                 }
                 ?>
                
             </div>
+        
     </section>
+    <div class="modal fade" id="valider" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <form method="post" action="" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Note de <?=$stmt['prenom']?>  <?=$stmt['nom']?></h5> 
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    <h6 class="heading-small text-muted mb-4">Note</h6>
+                        <div class="stars">
+                            <i class="bx bxs-star" data-value="1"></i><i class="bx bxs-star" data-value="2"></i><i class="bx bxs-star" data-value="3"></i><i class="bx bxs-star" data-value="4"></i><i class="bx bxs-star" data-value="5"></i>
+                        </div><br>
+                        <h6 class="heading-small text-muted mb-4">Commentaire</h6>
+                        <div class="form-group focused">
+                            <div  class="form-group focused">
+                                <label for="commentaire"></label>
+                                <textarea name="comment" id="commentaire" class="form-control form-control-alternative" placeholder="Commentaire ..."></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="note" id="note" value="0">
+                        <button class="btn btn-info btn-lg ms-4	" type="submit">Valider</button>
+                                            
+                    </div>
+                                        
+                </div>
+            </form>
+        </div>
+    </div>
 
     
     <?php
