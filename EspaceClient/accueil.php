@@ -89,8 +89,16 @@ $service2s =$query2->fetchAll();
                     <li class="nav__item"><a href="logout.php" class="nav__link">Deconnexion</a></li>
                     <li><i class='bx bx-moon change-theme' id="theme-button"></i></li>
                 </ul>
+               
             </div>
-            <div  style="margin-top:-3.5%;margin-right: -30%;" class="box-search">
+           
+            
+
+            <div class="nav__toggle" id="nav-toggle">
+                <i class='bx bx-menu'></i>
+            </div>
+        </nav>
+        <div  style="margin-top:-4%;margin-left: 67%;" class="box-search">
                     <input type="checkbox" id="check">
                     <div class="search-box">
                         <input type="text" id="searchText" placeholder="Rechercher un service..." >
@@ -100,11 +108,6 @@ $service2s =$query2->fetchAll();
                     </div>
                 <div id="serviceList"></div>
             </div>
-
-            <div class="nav__toggle" id="nav-toggle">
-                <i class='bx bx-menu'></i>
-            </div>
-        </nav>
     </header>
 
     <section class="slider">

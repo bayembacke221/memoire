@@ -104,25 +104,20 @@ if (isset($_SESSION['numero'])) {
                     <li><i class='bx bx-moon change-theme' id="theme-button"></i></li>
                 </ul>
             </div>
-            <div style="margin-top:-3.5%;margin-right: -10%;" class="box-search">
-                        <input type="checkbox" id="check">
-                        <div class="search-box">
-                            <input type="text" id="searchText" placeholder="Rechercher un service..." >
-                            <label class="icon" for="check">
-                                <i id="searchBtn" class="bx bx-search"></i>
-                            </label>
-                        </div>
-                        <div id="serviceList"></div>
-                    </div>
-
-            <div class="nav__toggle" id="nav-toggle">
-                <i class='bx bx-menu'></i>
-            </div>
-
             <div class="nav__toggle" id="nav-toggle">
                 <i class='bx bx-menu'></i>
             </div>
         </nav>
+        <div  style="margin-top:-4%;margin-left: 67%;" class="box-search">
+                    <input type="checkbox" id="check">
+                    <div class="search-box">
+                        <input type="text" id="searchText" placeholder="Rechercher un service..." >
+                        <label class="icon" for="check">
+                            <i id="searchBtn" class="bx bx-search"></i>
+                        </label>
+                    </div>
+                <div id="serviceList"></div>
+            </div>
     </header>
     <div class="modal fade" id="valider" tabindex="-1">
         <div class="modal-dialog modal-lg">

@@ -3,9 +3,8 @@ session_start();
 require_once('../../ConnexionDB/connexionDB.php');
 require_once('function.php');
 if (isset($_SESSION['numero'])) {
-    $query =$BDD->prepare("SELECT DISTINCT d.*,p.*,o.idPrestataire,o.idService FROM  demande d 
-    LEFT JOIN personne p ON (p.numero = d.idPrestataire) LEFT JOIN offre o ON (o.idPrestataire=p.numero)
- where d.idClient=? ");
+    $query =$BDD->prepare("SELECT  d.*,p.*,ps.* FROM  demande d LEFT JOIN personne p ON (p.numero=d.idPrestataire) LEFT JOIN prestataire ps ON (ps.idPrestataire=p.numero)
+    where d.idClient=? ");
     $query->execute(array($_SESSION['numero']));
     $stmts = $query->fetchAll();
    
@@ -93,6 +92,7 @@ if (isset($_SESSION['numero'])) {
                     <div class="menu__content"  >
                     <img   src="../../EspacePrestataire/images/<?=$stmt['photo']?>" class="rounded-circle"><br>
                     <h3 style="color: #069C54;" class="menu__name m-sm-3"><?= $stmt['prenom']?> <?= $stmt['nom']?></h3><br>
+                    <h3 style="color: #069C54;" class="menu__name m-sm-3"><?= $stmt['profession']?></h3><br>
                     <h3 style="color: #393939;" class="menu__name "><?= $stmt['information']?><br><?=$stmt['DateDemande']?></h3><br>
                     
                     <?php

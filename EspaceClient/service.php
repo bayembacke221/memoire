@@ -48,7 +48,7 @@ $service2s =$query2->fetchAll();
                                <?php
                            foreach ($services as $service) {
                                    ?>
-                                   <a href="voir_offre.php?infoId=<?=$service['idService']?>" class="nav__link "><?=$service['nom']?></a><br>
+                                   <a href="voir_offre.php?infoId=<?=$service['idService']?>&nomoffre=<?=$service['nom']?>" class="nav__link "><?=$service['nom']?></a><br>
                                    <?php
                                    }?>
                                   
@@ -59,7 +59,7 @@ $service2s =$query2->fetchAll();
                                            <?php
                                                foreach ($service2s as $service2) {
                                                ?>
-                                               <a href="voir_offre.php?infoId=<?=$service2['idService']?>" class="nav__link "><?=$service2['nom']?></a><br>
+                                               <a href="voir_offre.php?infoId=<?=$service2['idService']?>&nomoffre=<?=$service2['nom']?>" class="nav__link "><?=$service2['nom']?></a><br>
                                                <?php
                                                }?>
                                            </ul>
@@ -97,7 +97,7 @@ $service2s =$query2->fetchAll();
 <section   class="menu section bd-container" id="menu" >  
             <div class="menu__container bd-grid">
                 <?php
-                 $sql =$BDD->query("SELECT * FROM service");
+                 $sql =$BDD->query("SELECT * FROM service  ORDER BY `service`.`nom` ASC");
                     $stmts =$sql->fetchAll();
                     foreach($stmts as $stmt){ 
                         $idserv = $stmt['idService'];

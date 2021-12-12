@@ -197,10 +197,10 @@ if (isset($_SESSION['email'])) {
 			if(isset($_SESSION['email'])){
 						?>
         <form method="post">
-            <div style="margin-left: 42.5%; ">
-            <a href='voir_profile.php?infoId=<?=$info?>' ><button class="btn btn-info ms-4 m-sm-3"  type="button" id="btnProfile" name="user-profile">Voir profile</button></a><br>
+            <div style="margin-left: 35%; ">
+            <a href='voir_profile.php?infoId=<?=$info?>' ><button class="btn btn-info ms-4 m-sm-3"  type="button" id="btnProfile" name="user-profile">Visiter le profile</button></a><br>
             <?php
-					if(!isset($verifEtat['etat'])){
+					if(!isset($verifEtat['etat']) || isset($verifEtat['etat']) ){
 			?>
                 <button class="btn btn-success ms-4 m-sm-2" data-bs-toggle="modal" data-bs-target="#valider" type="button" id="btnAjouter" name="user-ajouter">Demander service</button><br>
                 <?php

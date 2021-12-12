@@ -12,7 +12,7 @@ if (isset($_SESSION['numero'])) {
     WHERE  d.idClient=? ";
     $req=$BDD->prepare($sql);
     $req->execute(array($_SESSION['numero']));
-     $voir_profil=$req->fetch();
+     $voir_profils=$req->fetchAll();
 
     
 ?>
@@ -76,15 +76,15 @@ if (isset($_SESSION['numero'])) {
     <section style="margin-top:-5%;margin-left:0.5%" class="menu section bd-container" id="menu" >  
             <div class="menu__container bd-grid">
                 <?php
+                foreach($voir_profils as $voir_profil){
                     if (isset($voir_profil['etat'])) {
                     
                 ?>
                 <div class="menu__content"  >
                         <img src="../../EspacePrestataire/images/<?=$voir_profil['photo']?>"
                             class=" rounded-circle"><br>
-                    <h3 class="menu__name ms-2">Prenom : <?=$voir_profil['prenom']?></h3><br>
-                    <h3 class="menu__name">Nom : <?=$voir_profil['nom']?></h3><br>
-                    <h3 class="menu__name">Profession : <?=$voir_profil['profession']?></h3><br>
+                    <h3 class="menu__name ms-2"><?=$voir_profil['prenom']?> <?=$voir_profil['nom']?></h3><br>
+                    <h3 class="menu__name"><?=$voir_profil['profession']?></h3><br>
                         <?php
 			            if(isset($_SESSION['numero'])){
                             
@@ -105,7 +105,9 @@ if (isset($_SESSION['numero'])) {
                     ?>
                 </div>
                 <?php     
-                    }?>
+                    }
+                    
+                }?>
             </div>
      </section> 
      
