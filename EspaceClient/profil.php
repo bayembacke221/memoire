@@ -4,12 +4,12 @@ require_once('../ConnexionDB/connexionDB.php');
 require_once('../Function/function.php');
 if (isset($_SESSION['numero'])) {
     $requete = $BDD->prepare("SELECT * FROM personne WHERE numero = ?");
-  $requete->execute([$_SESSION['numero']]);
-  $user = $requete->fetch();
-  $query = $BDD->prepare("SELECT * from prestataire WHERE numero = ?");
-  $query->execute(array($user['numero']));
-  $query2 = $query->fetch();
-    
+    $requete->execute([$_SESSION['numero']]);
+    $user = $requete->fetch();
+    $query =$BDD->query("SELECT * FROM service LIMIT 9");
+$services =$query->fetchAll();
+$query2 = $BDD->query("SELECT * FROM service LIMIT 10 OFFSET 9 ");
+$service2s =$query2->fetchAll();
     
 ?>
 
@@ -36,13 +36,13 @@ if (isset($_SESSION['numero'])) {
 
        <!--========== CSS ==========-->
        <link rel="stylesheet" href="../assets/css/styles.css?t=<?php echo time(); ?>">
-       <link rel="stylesheet" href="styleAccueil.css?t=<?php echo time(); ?>">
+       <link rel="stylesheet" href="../EspacePrestataire/styleAccueil.css?t=<? echo time(); ?>">
 
        <title>Kaay Deefar</title>
        <link rel="icon" type="image/png" sizes="20x20" href="../Images/job-5359923_640.png">
 
        <!-- STYLE CSS -->
-       <link rel="stylesheet" href="css/style.css?t=<?php echo time(); ?>">
+       <link rel="stylesheet" href="../css/style.css?t=<?php echo time(); ?>">
 </head>
 <body>
      <!--========== HEADER ==========-->
@@ -52,10 +52,41 @@ if (isset($_SESSION['numero'])) {
                 <ul class="nav__list">
                     <li class="nav__item"><a href="accueil.php" class="nav__link active-link active">Accueil</a></li>
                     <li class="nav__item"><a href="profil.php" class="nav__link"><i class="bx bxs-user-pin"></i>Profil</a></li>
-                    <li class="nav__item"><a href="Accueil/messagerie.php" class="nav__link "><i class="bx bxs-message-alt-detail"></i> Boite Messagerie</a></li>
-                    <li class="nav__item"><a href="Accueil/consulterOffre.php" class="nav__link">Mes demandes</a></li>
-                    <li class="nav__item"><a href="Accueil/favoris.php" class="nav__link">Mes offres</a></li>
-                    <li class="nav__item"><a href="deconnexion.php" class="nav__link">Deconnexion</a></li>
+                    <li class="nav__item"><a href="service.php" class=" nav__link ">Services</a>
+                        <div class="sub-menu-1">
+                           
+                            <ul>
+                                <li class="nav__item">
+                                <?php
+                            foreach ($services as $service) {
+                                    ?>
+                                    <a href="voir_offre.php?infoId=<?=$service['idService']?>" class="nav__link "><?=$service['nom']?></a><br>
+                                    <?php
+                                    }?>
+                                   
+                                    <div class="sub-menu-2">
+                                        <ul>
+
+                                            <li class="nav__item">
+                                            <?php
+                                                foreach ($service2s as $service2) {
+                                                ?>
+                                                <a href="voir_offre.php?infoId=<?=$service2['idService']?>" class="nav__link "><?=$service2['nom']?></a><br>
+                                                <?php
+                                                }?>
+                                            </ul>
+                                    </div>
+                                   
+                                </li>
+                            </ul>
+                            
+                        </div>
+                       
+                    </li>
+                    <li class="nav__item"><a href="Accueil/messagerie.php" class="nav__link "><i class="bx bxs-message-alt-detail"></i>Messagerie</a></li>
+                    <li class="nav__item"><a href="Accueil/suivreDemande.php" class="nav__link">Suivis des demandes</a></li>
+                    <li class="nav__item"><a href="Accueil/favoris.php" class="nav__link">Favoris</a></li>
+                    <li class="nav__item"><a href="logout.php" class="nav__link">Deconnexion</a></li>
                     <li><i class='bx bx-moon change-theme' id="theme-button"></i></li>
                 </ul>
             </div>
@@ -147,7 +178,7 @@ if (isset($_SESSION['numero'])) {
                   <i class="ni business_briefcase-24 mr-2"></i>
                 </div>
                 <div>
-                  <i class="ni education_hat mr-2"></i><?=$query2['profession']?> 
+                  <i class="ni education_hat mr-2"></i><?=$user['telephone']?> 
                 </div>
                 
               </div>
@@ -165,25 +196,18 @@ if (isset($_SESSION['numero'])) {
               </div>
             </div>
             <div class="card-body">
-              <form method="POST" enctype="multipart/form-data" action="modifier.php">
+              <form method="post" enctype="multipart/form-data" action="modifier.php">
               
                 <h6 class="heading-small text-muted mb-4">Information de l'utilisateur</h6>
                 <div class="pl-lg-4">
                   <div class="row">
-                    <div class="col-lg-6">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-username">Username</label>
-                        <input style="color:black" type="text" name="username" id="input-username" class="form-control form-control-alternative"  value="<?=$query2['username']?>">
-                      </div>
-                    </div>
+                   
                     <div class="col-lg-6">
                       <div class="form-group">
                         <label class="form-control-label" for="input-email">Adresse email</label>
                         <input style="color:black" type="email" name="email" id="input-email" class="form-control form-control-alternative" value="<?=$user['email']?>" >
                       </div>
                     </div>
-                  </div>
-                  <div class="row">
                     <div class="col-lg-6">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-first-name">Prenom</label>
@@ -211,7 +235,7 @@ if (isset($_SESSION['numero'])) {
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group focused">
-                        <label class="form-control-label" for="input-address">Address</label>
+                        <label class="form-control-label" for="input-address">Adresse</label>
                         <input style="color:black" id="input-address" name="adresse" class="form-control form-control-alternative" value="<?=$user['adresse']?>"  type="text">
                       </div>
                     </div>
@@ -223,22 +247,9 @@ if (isset($_SESSION['numero'])) {
                         <input style="color:black" type="text" name="telephone" id="input-city" class="form-control form-control-alternative" value="<?=$user['telephone']?>">
                       </div>
                     </div>
-                    <div class="col-lg-4">
-                      <div class="form-group focused">
-                        <label class="form-control-label" for="input-country">Profession</label>
-                        <input style="color:black" type="text" disabled name="profession" id="input-country" class="form-control form-control-alternative" value="<?=$query2['profession']?>">
-                      </div>
+                    
                     </div>
                     
-                  </div>
-                </div>
-                <hr class="my-4">
-                <!-- Description -->
-                <h6 class="heading-small text-muted mb-4">A propos de moi</h6>
-                <div class="pl-lg-4">
-                  <div class="form-group focused">
-                    <label>A propos de moi</label>
-                    <textarea style="color:black" rows="4" name="propos" class="form-control form-control-alternative" placeholder="" value=""><?=$query2['propos']?></textarea>
                   </div>
                 </div>
                 <button name="valider" class="btn btn-info">Editer votre profil</button>

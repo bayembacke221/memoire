@@ -43,9 +43,6 @@ if ($_SESSION['password']) {
                         <a href="services.php" class="nav__link">Services</a>
                     </li>
                     <li class="nav__item">
-                        <a href="offre.php" class="nav__link">Offre</a>
-                    </li>
-                    <li class="nav__item">
                         <a href="logout.php" class="nav__link">Se Deconnecter</a>
                     </li>
                 </ul>

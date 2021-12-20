@@ -70,7 +70,7 @@ if (isset($_SESSION['numero'])) {
     
     <section class="menu section bd-container" id="menu" >  
       
-            <div class="menu__container bd-grid">
+            <div  class="menu__container bd-grid">
             <?php
         foreach ($stmts as $stmt){
                  if (isset($_POST['note'])) {
@@ -82,18 +82,18 @@ if (isset($_SESSION['numero'])) {
                         $query->execute(array($_SESSION['numero'],$prestataire,$comment,$note));
                     }
                 }
-                $select= $BDD->prepare("SELECT * FROM notes where idClient=?");
-                $select->execute(array($_SESSION['numero']));
+                $select= $BDD->prepare("SELECT * FROM notes where idClient=? AND idPrestataire=?");
+                $select->execute(array($_SESSION['numero'],$stmt['idPrestataire']));
                 $notes = $select->rowCount();
         ?>
                 <?php
                 if (isset($stmt['etat'])) {
                     ?>
-                    <div class="menu__content"  >
-                    <img   src="../../EspacePrestataire/images/<?=$stmt['photo']?>" class="rounded-circle"><br>
-                    <h3 style="color: #069C54;" class="menu__name m-sm-3"><?= $stmt['prenom']?> <?= $stmt['nom']?></h3><br>
-                    <h3 style="color: #069C54;" class="menu__name m-sm-3"><?= $stmt['profession']?></h3><br>
-                    <h3 style="color: #393939;" class="menu__name "><?= $stmt['information']?><br><?=$stmt['DateDemande']?></h3><br>
+                    <div  class="menu__content"  >
+                    <img   src="../../EspacePrestataire/images/<?=$stmt['photo']?>" style="border-radius:20%">
+                    <h3 style="color: #069C54;" class="menu__name m-sm-3"><?= $stmt['prenom']?> <?= $stmt['nom']?></h3>
+                    <h3 style="color: #069C54;" class="menu__name m-sm-3"><?= $stmt['profession']?></h3>
+                    <h3 style="color: #393939;" class="menu__name "><?= $stmt['information']?><br><?=$stmt['DateDemande']?></h3>
                     
                     <?php
                     if(isset($_SESSION['numero'])){
@@ -101,7 +101,7 @@ if (isset($_SESSION['numero'])) {
                         <form method="post" >
                         <input type="hidden"  name="id_relation" value="<?= $stmt['idPrestataire']?>" />
                         <input type="hidden"  name="id_cible" value="<?= $stmt['idClient']?>" />
-                        <input type="hidden"  name="id_cible" value="<?= $stmt['etat']?>" /><br><br>
+                        <input type="hidden"  name="id_cible" value="<?= $stmt['etat']?>" />
                         
                         <?php if(isset($stmt['etat']) && $stmt['etat'] == 0) { 
                             echo "<h3 style='color: #069C54;' class='menu__name m-sm-2'>Demande envoyee<i class='bx bx-send'></i></h3><br>";

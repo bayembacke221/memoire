@@ -52,6 +52,7 @@ $service2s =$query2->fetchAll();
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li class="nav__item"><a href="accueil.php" class=" nav__link active-link"><i class="bx bxs-home"></i> Accueil</a></li>
+                    <li class="nav__item"><a href="profil.php" class=" nav__link"><i class="bx bxs-user-pin"></i> Profil</a></li>
                     <li class="nav__item"><a href="service.php" class=" nav__link ">Services</a>
                         <div class="sub-menu-1">
                            

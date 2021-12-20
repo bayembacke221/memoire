@@ -2,7 +2,20 @@
 session_start();
 require_once('../ConnexionDB/connexionDB.php');
 if ($_SESSION['password']) {
+    if(!empty($_POST)){
+        extract($_POST);
+        $valid = (boolean)true;
+        if (isset($_POST['btn_supprimer'])) {
+            $numero=(int)$numero;
+            $idPrestataire=(int)$idPrestataire;
+            
+            $query = $BDD->prepare("DELETE  FROM prestataire WHERE idPrestataire=? ");
+            $query->execute(array($idPrestataire));
+            $query = $BDD->prepare("DELETE  FROM personne WHERE numero=? ");
+            $query->execute(array($idPrestataire));
     
+         }
+    } 
     
 
 ?>
@@ -45,9 +58,6 @@ if ($_SESSION['password']) {
                         <a href="services.php" class="nav__link">Services</a>
                     </li>
                     <li class="nav__item">
-                        <a href="offre.php" class="nav__link">Offre</a>
-                    </li>
-                    <li class="nav__item">
                         <a href="logout.php" class="nav__link">Se Deconnecter</a>
                     </li>
                 </ul>
@@ -57,20 +67,21 @@ if ($_SESSION['password']) {
 
   
  <section class="menu section bd-container" id="menu" >  
-            <div class="menu__container bd-grid">
+            <div  style="margin-left: 15%;" class="menu__container bd-grid">
  <?php
     $recupPrestataire =$BDD->query("SELECT c.*,p.* FROM prestataire c LEFT JOIN personne p ON(p.numero=c.numero)") ;
     while ($prestataire= $recupPrestataire->fetch()){
         ?>
 
                 <div class="menu__content"  >
-                    <img   src="../EspacePrestataire/images/<?=$prestataire['photo']?>" class="rounded-circle">
-                    <h3 class="menu__name"><?= $prestataire['prenom']?></h3>
-                    <h3 class="menu__name"><?= $prestataire['nom']?></h3>
+                    <img   src="../EspacePrestataire/images/<?=$prestataire['photo']?>" style="border-radius: 10%;">
+                    <h3 class="menu__name"><?= $prestataire['prenom']?> <?= $prestataire['nom']?></h3>
                     <h3 class="menu__name"><?= $prestataire['profession']?></h3><br>
-                    <button class="btn btn-danger">Banir</button><br>
-                    <button class="btn btn-warning">Supprimer</button><br>
-                    <button class="btn btn-info">Bloquer Compte</button><br>
+                    <form method="post">
+                        <input type="hidden"  name="idPrestataire" value="<?= $prestataire['idPrestataire']?>">
+                        <input type="hidden"  name="numero" value="<?= $prestataire['numero']?>">
+                        <button type="submit" class="btn btn-danger " name="btn_supprimer" >Supprimer compte</button>
+                    </form>
                 </div>
           
        

@@ -15,7 +15,7 @@ if (isset($_SESSION['username'])) {
     WHERE  d.idPrestataire=?";
     $req=$BDD->prepare($sql);
     $req->execute(array($prestataire));
-   $voir_profil=$req->fetch();
+   $voir_profils=$req->fetchAll();
    if(!empty($_POST)){
        extract($_POST);
        $valid = (boolean)true;
@@ -170,8 +170,9 @@ if (isset($_SESSION['username'])) {
 
 
 <section style="margin-top:-5%;margin-left:3%" class="menu section bd-container" id="menu" >  
-            <div class="menu__container bd-grid">
+            <div  style="margin-left: 25%;" class="menu__container bd-grid">
             <?php
+            foreach ($voir_profils as $voir_profil){
                     if (isset($voir_profil['etat'])) {
                     
                 ?>
@@ -214,7 +215,9 @@ if (isset($_SESSION['username'])) {
                     ?>
                 </div>
                 <?php     
-                    }?>
+                    }
+                    
+                }?>
             </div>
      </section> 
      <div class="modal fade" id="valider" tabindex="-1">

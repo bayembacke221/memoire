@@ -15,7 +15,7 @@ if (isset($_SESSION['numero'])){
     WHERE  d.idPrestataire=? ";
     $req=$BDD->prepare($sql);
     $req->execute(array( $prestataire));
-     $voir_profil=$req->fetch();
+     $voir_profils=$req->fetchAll();
     
      if(!empty($_POST)){
          extract($_POST);
@@ -103,12 +103,13 @@ if (isset($_SESSION['numero'])){
     <section style="margin-top:-5%;margin-left:5%" class="menu section bd-container" id="menu" >  
             <div class="menu__container bd-grid">
                 <?php
+                 foreach($voir_profils as $voir_profil){
                     if (isset($voir_profil['etat'])) {
                     
                 ?>
                 <div class="menu__content"  >
                         <img src="../../EspaceClient/images/<?=$voir_profil['photo']?>"
-                            class=" rounded-circle"><br><br>
+                            style="border-radius: 10%;"><br><br>
                     <h3 class="menu__name ms-2"><?=$voir_profil['prenom']?> <?=$voir_profil['nom']?></h3><br>
                     
                         <?php
@@ -131,7 +132,9 @@ if (isset($_SESSION['numero'])){
                     ?>
                 </div>
                 <?php     
-                    }?>
+                    }
+                    
+                }?>
             </div>
 
                        

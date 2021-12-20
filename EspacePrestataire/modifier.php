@@ -43,63 +43,64 @@ if (isset($_SESSION['numero'])) {
                 $valid = false;
                 $er_propos = "Il faut mettre un propos";
             }else{
-                $req = $BDD->prepare("SELECT p.email,ps.username FROM personne p LEFT JOIN prestataire ps on (p.numero=ps.numero)
-                        WHERE p.email=? AND ps.username=? ");
-                        $req->execute(array($email,$username));
+                $req = $BDD->prepare("SELECT username  FROM prestataire  
+                        WHERE numero=? ");
+                        $req->execute(array($_SESSION['numero']));
                         $stmt= $req->fetch();
                         if ($stmt['username'] <> "" && $_SESSION['username'] != $stmt['username']){
                             $valid = false;
                             $er_username = "Ce username existe déjà";
-                        }else{
-                            if (isset($_FILES['photo'])) {
-                                $img_name  = $_FILES['photo']['name'];
-                                $tmp_name  = $_FILES['photo']['tmp_name'];
-                                $error  = $_FILES['photo']['error'];
-                  
-                                if($error === 0){
-                                   $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
-                  
-                                  $img_ex_lc = strtolower($img_ex);
-                  
-                                  $allowed_exs = array("jpg", "jpeg", "png");
-                  
-                                  if (in_array($img_ex_lc, $allowed_exs)) {
-                                      
-                                    $new_img_name = $username. '.'.$img_ex_lc;
-                  
-                                    $img_upload_path = 'modfier/'.$new_img_name;
-                  
-                                    move_uploaded_file($tmp_name, $img_upload_path);
-                                  }else {
-                                    $em = "Type de fichier non reconnue";
-                                    header("Location: profil.php");
-                                    exit;
-                                  }
-                  
-                                }
-                            }
-                           
-                            if (isset($new_img_name)) {
-                                $req =$BDD->prepare("UPDATE personne SET prenom = ?, nom = ?, email=?, telephone=?,adresse=?,photo=?
-                                WHERE numero = ?");
-                                $req->execute(array($prenom, $nom, $email,$telephone,$adresse,$new_img_name,$session));
-                                $_SESSION['nom'] = $nom;
-                                $_SESSION['prenom'] = $prenom;
-                                $_SESSION['email'] = $email;
-                                $_SESSION['telephone'] = $telephone;
-                                $_SESSION['propos'] = $propos;
-                                $_SESSION['adresse'] = $adresse;
-                                $req =$BDD->prepare("UPDATE prestataire SET username=?,propos=? WHERE idPrestataire=?");
-                                $req->execute(array($username,$propos,$_SESSION['idPrestataire']));
-                                $_SESSION['username'] = $username;
-
-                                header('Location:  profil.php');
-                                exit;
-                            }
                         }
         
                 }
+                if ($valid) {
+                    $req =$BDD->prepare("UPDATE personne SET prenom = ?, nom = ?, email = ? , telephone=? , adresse=?
+                    WHERE numero = ?");
+                    $req->execute(array($prenom, $nom,$email,$telephone,$adresse, $_SESSION['numero']));
+                    $_SESSION['nom'] = $nom;
+                    $_SESSION['prenom'] = $prenom;
+                    $_SESSION['email'] = $email;
+                    $req2 = $BDD->prepare("UPDATE prestataire SET propos=?,username=? WHERE numero = ?");
+                    $req2->execute(array($propos,$username,$_SESSION['numero'])); 
+                }
                 
         }
+        
+        if (isset($_FILES['pp'])) {
+        
+            $img_name  = $_FILES['pp']['name'];
+            $tmp_name  = $_FILES['pp']['tmp_name'];
+            $error  = $_FILES['pp']['error'];
+            if($error === 0){
+                
+                $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+    
+                $img_ex_lc = strtolower($img_ex);
+    
+                $allowed_exs = array("jpg", "jpeg", "png");
+                if (in_array($img_ex_lc, $allowed_exs)) {
+                
+                    $new_img_name =$_SESSION['numero'].'.'.$img_ex_lc;
+    
+                    $img_upload_path = "../EspacePrestataire/images/".$new_img_name;
+    
+                    move_uploaded_file($tmp_name, $img_upload_path);
+                }else {
+                    $em = "Type de fichier non reconnue";
+                    header("Location: accueil.php?error=$em&$data");
+                        exit;
+                }
+    
+            }
+            
+        }
+        if (isset($new_img_name)) {
+        $req =$BDD->prepare("UPDATE personne SET photo = ?
+        WHERE numero = ?");
+        $req->execute(array($new_img_name, $_SESSION['numero']));
+        
+        }
+        header('Location:  profil.php');
+        exit;
     }
 }

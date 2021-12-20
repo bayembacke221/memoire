@@ -27,7 +27,6 @@ if ($_SESSION['password']) {
 
 </head>
 
- <body>
             <!--========== HEADER ==========-->
             <header class="l-header" id="header">
         <nav class="nav bd-container">
@@ -56,8 +55,10 @@ if ($_SESSION['password']) {
         </nav>
  </header>
 
+ <body>
+
     <!--Formulaire d'ajout de Services-->
-    <div class="container col-md-6 col-md-offset-3">
+    <div style="width:60%" class="container">
         <div class="panel panel-info">
             <div class="panel-heading">Formulaire d'ajout de service</div>
             <div class="panel-body" id="form">
@@ -87,7 +88,46 @@ if ($_SESSION['password']) {
         </div>
     </div>
     
+<section   class="menu section bd-container" id="menu" >  
+            <div style="margin-left: 25%;" class="menu__container bd-grid">
+                <?php
+                 $sql =$BDD->query("SELECT * FROM service");
+                    $stmts =$sql->fetchAll();
+                    foreach($stmts as $stmt){ 
+                        $idserv = $stmt['idService'];
+                        $sql2=$BDD->query("SELECT * FROM photo where idService=$idserv");
+                                                $stmt2 =$sql2->fetch();
+                        
+                            ?>
+                        <div style="margin-right: 5%;background-color: #393939;" class="menu__content" >
+                            <img   src="../EspaceAdmin/uploadImage/<?=$stmt2['nomPhoto']?>" class="rounded-circle"><br>
+                            <h3 style="color: #069C54;" class="menu__name"><?= $stmt['nom']?></h3><br>
+                            <h3 style="color: #fff;" class="menu__name"><?= $stmt['domain']?></h3><br>
+                            <form method="post" action="">
+                                <button type="button" data-bs-toggle="modal" data-bs-target="#valider" 
+                                data-bs-whatever="<?=$offre['description']?>" data-whatever="<?= $offre['idOffre']?>"
+                                class="btn btn-primary" name="editer"><i class='bx bxs-edit' id="offre" ></i></button>
+                                <button type="submit" class="btn btn-danger ms-5" name="supprimer"><i class='bx bxs-comment-x' ></i></button>
+                            </form>
+                            </div>
+                        
+                   
+                <?php
+                    }
+                        ?>
+                       
+            </div>
+    </section>
+    
+        <?php
+			require_once('../Footer/footer.php')
+		?>
+		
+		<!--========== SCROLL REVEAL ==========-->
+		<script src="../assets/dist/scrollreveal.js"></script>
 
+		<!--========== MAIN JS ==========-->
+		<script src="../assets/js/main.js"></script>
 </body>
 </html>
 <?php
